@@ -135,7 +135,7 @@
             </section>
 
             <!-- 3. SENARAI PESANAN & MULTI-SYNC -->
-            <section class="card-box" style="border: 1px solid #e5e7eb; padding: 16px; border-radius: 8px; background: #fff;">
+            <section class="card-box" style="border: 1px solid #e5e7eb; padding: 16px; border-radius: 8px; background: #fff; margin-bottom: 20px;">
                 <h3 style="margin-top: 0; color: #1e3a8a;">📦 3. Pesanan Pelajar & Pengurusan Pukal</h3>
 
                 <!-- CONTAINER PENGURUSAN PUKAL (BATCH CONTROL KOLEJ) -->
@@ -147,6 +147,40 @@
                 <p style="font-size: 0.85em; font-weight: bold; margin-bottom: 10px;">Senarai Pesanan Masuk (Real-Time):</p>
                 <div id="vendor-active-orders">
                     <p style="color: #888; font-size: 0.85em;">Memuatkan pesanan masuk...</p>
+                </div>
+            </section>
+
+            <!-- 4. JUMLAH JUALAN KESELURUHAN (TOTAL SALES) -->
+            <section class="card-box" style="background: linear-gradient(135deg, #059669, #047857); color: white; border-radius: 8px; margin-bottom: 20px; padding: 16px;">
+                <h3 style="color: white; margin-top: 0; margin-bottom: 5px;">📊 Jumlah Jualan Keseluruhan (Total Sales)</h3>
+                <h1 id="vendor-total-sales-display" style="margin: 0; font-size: 2.2em;">RM 0.00</h1>
+                <p style="font-size: 0.8em; opacity: 0.9; margin-top: 4px;">Berdasarkan pesanan yang telah selesai (Completed)</p>
+            </section>
+
+            <!-- 5. SEJARAH PESANAN & LAPORAN GAYA EXCEL -->
+            <section class="card-box" style="border: 1px solid #e5e7eb; padding: 16px; border-radius: 8px; background: #fff;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                    <h3 style="margin: 0; color: #1e3a8a;">📜 Sejarah Pesanan Lepas (Excel Report View)</h3>
+                </div>
+
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 0.85em; text-align: left;">
+                        <thead>
+                            <tr style="background-color: #f3f4f6; border-bottom: 2px solid #d1d5db;">
+                                <th style="padding: 8px; border: 1px solid #e5e7eb;">ID Pesanan</th>
+                                <th style="padding: 8px; border: 1px solid #e5e7eb;">Tarikh</th>
+                                <th style="padding: 8px; border: 1px solid #e5e7eb;">Nama Pelajar</th>
+                                <th style="padding: 8px; border: 1px solid #e5e7eb;">Menu / Item</th>
+                                <th style="padding: 8px; border: 1px solid #e5e7eb; text-align: right;">Jumlah (RM)</th>
+                                <th style="padding: 8px; border: 1px solid #e5e7eb; text-align: center;">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody id="vendor-excel-history-body">
+                            <tr>
+                                <td colspan="6" style="padding: 12px; text-align: center; color: #888;">Memuatkan data sejarah jualan...</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </section>
 

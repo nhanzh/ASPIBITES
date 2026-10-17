@@ -1,6 +1,3 @@
-// ==========================================
-// 1. FIREBASE INITIALIZATION
-// ==========================================
 const firebaseConfig = {
     apiKey: "AIzaSyC39UI_RUWR7uPahaiQhSRybJE0U9ae8e8",
     authDomain: "aspi-bites.firebaseapp.com",
@@ -18,16 +15,12 @@ if (!firebase.apps.length) {
 
 const db = firebase.database();
 
-// ==========================================
-// 2. PEMANTAUAN LEJER & PESANAN (REAL-TIME)
-// ==========================================
 function mulaPantauAdminDashboard() {
     const ordersContainer = document.getElementById('admin-orders-list');
     const vendorsContainer = document.getElementById('admin-vendors-list');
     const countElem = document.getElementById('total-orders-count');
     const commissionElem = document.getElementById('total-admin-commission');
 
-    // Pantau Pesanan & Pengiraan Komisyen Admin
     db.ref('orders').on('value', (snapshot) => {
         if (!ordersContainer) return;
         ordersContainer.innerHTML = '';
@@ -70,7 +63,6 @@ function mulaPantauAdminDashboard() {
         if (commissionElem) commissionElem.innerText = `RM ${terkumpulKomisyen.toFixed(2)}`;
     });
 
-    // Pantau Senarai Vendor
     db.ref('vendors').on('value', (snapshot) => {
         if (!vendorsContainer) return;
         vendorsContainer.innerHTML = '';
@@ -85,21 +77,18 @@ function mulaPantauAdminDashboard() {
             const vendor = childSnap.val();
 
             vendorsContainer.innerHTML += `
-                <div style="padding:8px 0; border-bottom:1px solid #eee; font-size:0.85em; display: flex; justify-content: space-between; align-items: center;">
+                <div style="padding:8px 0; border-bottom:1px solid #eee; font-size:0.85em; display: flex; justify-content: space-between; align-items: center; gap: 10px;">
                     <div>
                         <strong>${vendor.shopName}</strong> (${(vendor.cafeLocation || '').toUpperCase()})<br/>
-                        <span style="color:#666; font-size:0.8em;">Bank: ${vendor.bankName || '-'} (${vendor.accountNo || '-'})</span>
+                        <span style="color:#666; font-size:0.8em;">E-mel: ${vendor.email || '-'} | Bank: ${vendor.bankName || '-'} (${vendor.accountNo || '-'})</span>
                     </div>
-                    <button onclick="padamVendorAdmin('${vendorKey}')" style="background:#dc2626; color:white; border:none; padding:4px 8px; border-radius:4px; font-size:0.75em; cursor:pointer; font-weight: bold;">🗑️ Padam</button>
+                    <button onclick="padamAkaunVendorOlehAdmin('${vendorKey}')" style="background:#dc2626; color:white; border:none; padding:5px 8px; border-radius:4px; font-size:0.75em; cursor:pointer; font-weight: bold; white-space: nowrap;">🗑️ Padam Vendor</button>
                 </div>
             `;
         });
     });
 }
 
-// ==========================================
-// 3. FUNGSI PEMADAMAN ADMIN (REAL-TIME)
-// ==========================================
 function padamPesananAdmin(orderKey) {
     if (confirm("Adakah anda pasti mahu memadam pesanan ini daripada sistem?")) {
         db.ref(`orders/${orderKey}`).remove()
@@ -116,10 +105,10 @@ function padamSemuaPesananSystem() {
     }
 }
 
-function padamVendorAdmin(vendorKey) {
-    if (confirm("Adakah anda pasti mahu memadam vendor ini dari senarai?")) {
+function padamAkaunVendorOlehAdmin(vendorKey) {
+    if (confirm("AMARAN: Adakah anda pasti mahu memadam akaun vendor ini dari sistem?")) {
         db.ref(`vendors/${vendorKey}`).remove()
-            .then(() => alert("Vendor berjaya dipadam."))
+            .then(() => alert("Akaun vendor berjaya dipadam."))
             .catch(err => alert("Ralat: " + err.message));
     }
 }

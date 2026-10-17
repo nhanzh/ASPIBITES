@@ -40,10 +40,11 @@ auth.onAuthStateChanged((user) => {
         if (mainContent) mainContent.style.display = 'block';
         if (userEmailText) userEmailText.innerText = user.email;
 
-        // Muat turun data vendor & mula pantau pesanan/menu
+        // Muat turun data vendor & mula pantau pesanan, menu, dan laporan jualan
         muatTurunProfilVendor(user.uid);
         mulaPantauMenuVendor(user.uid);
         mulaPantauPesananVendor(user.uid);
+        mulaPantauLaporanVendor(user.uid);
     } else {
         currentVendorUser = null;
         selectedVendorUid = null;
@@ -230,7 +231,6 @@ function mulaPantauPesananVendor(vendorUid) {
             return;
         }
 
-        // Kumpul senarai kolej yang ada pesanan aktif
         const kolejAktifSet = new Set();
 
         snapshot.forEach((childSnap) => {
@@ -267,7 +267,6 @@ function mulaPantauPesananVendor(vendorUid) {
                             </div>
                         </div>
 
-                        <!-- PANEL PENUKARAN STATUS INDIVIDU -->
                         <div style="margin-top:10px; display:flex; gap:6px; flex-wrap:wrap; align-items:center;">
                             <label style="font-size:0.78em; font-weight:bold;">Status:</label>
                             <select onchange="kemaskiniStatusOrder('${orderKey}', this.value)" style="padding:4px 8px; border-radius:4px; font-size:0.8em; border:1px solid #ccc;">
@@ -283,7 +282,6 @@ function mulaPantauPesananVendor(vendorUid) {
                             </select>
                         </div>
 
-                        <!-- PANEL TUGASAN RUNNER -->
                         <div style="margin-top:10px; padding:8px; background:#f0fdf4; border:1px solid #bbf7d0; border-radius:6px; font-size:0.8em;">
                             <p style="margin:0 0 4px 0; font-weight:bold; color:#166534;">🛵 Info Runner Penghantaran:</p>
                             <div style="display:flex; gap:6px; margin-bottom:4px;">
@@ -299,13 +297,64 @@ function mulaPantauPesananVendor(vendorUid) {
             }
         });
 
-        // Jana Panel Kawalan Pukal (Batch Operations per Kolej)
         janapanelBatchKolej(Array.from(kolejAktifSet));
     });
 }
 
+// ==========================================
+// 6. LAPORAN JUALAN & SEJARAH EXCEL VIEW
+// ==========================================
+function mulaPantauLaporanVendor(vendorUid) {
+    const tableBody = document.getElementById('vendor-excel-history-body');
+    const totalSalesDisplay = document.getElementById('vendor-total-sales-display');
+
+    if (!tableBody) return;
+
+    db.ref('orders').orderByChild('vendorUid').equalTo(vendorUid).on('value', (snapshot) => {
+        tableBody.innerHTML = '';
+        let cumulativeSales = 0;
+
+        if (!snapshot.exists()) {
+            tableBody.innerHTML = `<tr><td colspan="6" style="padding: 12px; text-align: center; color: #888;">Tiada rekod pesanan lagi.</td></tr>`;
+            if (totalSalesDisplay) totalSalesDisplay.innerText = "RM 0.00";
+            return;
+        }
+
+        snapshot.forEach((childSnap) => {
+            const orderKey = childSnap.key;
+            const order = childSnap.val();
+
+            let itemStr = (order.items || []).map(i => `${i.name} (x${i.quantity})`).join(', ');
+            let tarikhMasa = order.createdAt ? new Date(order.createdAt).toLocaleString() : '-';
+            let hargaItem = order.subtotalAmount || order.totalAmount || 0;
+
+            // Masukkan dalam kiraan Total Sales jika status COMPLETED
+            if (order.status === 'COMPLETED') {
+                cumulativeSales += hargaItem;
+            }
+
+            tableBody.innerHTML += `
+                <tr style="border-bottom: 1px solid #e5e7eb;">
+                    <td style="padding: 8px; border: 1px solid #e5e7eb; font-weight: bold;">#${orderKey.slice(-5)}</td>
+                    <td style="padding: 8px; border: 1px solid #e5e7eb; color: #4b5563;">${tarikhMasa}</td>
+                    <td style="padding: 8px; border: 1px solid #e5e7eb;">${order.studentName || '-'}</td>
+                    <td style="padding: 8px; border: 1px solid #e5e7eb; color: #374151;">${itemStr}</td>
+                    <td style="padding: 8px; border: 1px solid #e5e7eb; text-align: right; font-weight: bold; color: #059669;">RM ${hargaItem.toFixed(2)}</td>
+                    <td style="padding: 8px; border: 1px solid #e5e7eb; text-align: center;">
+                        <span style="font-size: 0.75em; padding: 2px 6px; border-radius: 4px; background: #e5e7eb;">${formatStatusLabel(order.status)}</span>
+                    </td>
+                </tr>
+            `;
+        });
+
+        if (totalSalesDisplay) {
+            totalSalesDisplay.innerText = `RM ${cumulativeSales.toFixed(2)}`;
+        }
+    });
+}
+
 // =======================================================
-// 6. SYNC MULTI-ACCOUNT (BATCH UPDATE SECARA SERENTAK)
+// 7. SYNC MULTI-ACCOUNT (BATCH UPDATE SECARA SERENTAK)
 // =======================================================
 function janapanelBatchKolej(senaraiKolej) {
     const batchContainer = document.getElementById('vendor-batch-controls');
@@ -406,7 +455,7 @@ function simpanMaklumatRunner(orderId) {
 }
 
 // ==========================================
-// 7. HELPER STATUS BADGE & LABEL
+// 8. HELPER STATUS BADGE & LABEL
 // ==========================================
 function formatStatusLabel(status) {
     switch (status) {

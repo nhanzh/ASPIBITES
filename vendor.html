@@ -13,14 +13,15 @@
 </head>
 <body>
 
-    <header class="navbar">
-        <div class="logo" style="text-align: center; padding: 15px 0;">
+    <header class="navbar" style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap;">
+        <div class="logo" style="padding: 15px 20px;">
             <h1>ASPI<span>Bites</span> <small style="font-size: 0.5em; background: #2563eb; color: white; padding: 2px 6px; border-radius: 4px;">VENDOR</small></h1>
-            <p style="color: #666; font-size: 0.85em;">Portal Pengurusan Gerai & Pesanan Pelajar</p>
+            <p style="color: #666; font-size: 0.85em; margin: 0;">Portal Pengurusan Gerai & Pesanan Pelajar</p>
         </div>
-        <div id="vendor-profile-badge" style="display: none; text-align: right; padding: 0 20px;">
-            <span id="vendor-display-email" style="font-weight: bold; margin-right: 10px;"></span>
-            <button onclick="logKeluarVendor()" class="btn-logout" style="background: #ef4444; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;">Log Keluar</button>
+        <div id="vendor-profile-badge" style="display: none; text-align: right; padding: 0 20px; display: flex; align-items: center; justify-content: flex-end; gap: 8px;">
+            <span id="vendor-display-email" style="font-weight: bold; font-size: 0.85em;"></span>
+            <button onclick="logKeluarVendor()" class="btn-logout" style="background: #ef4444; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-size: 0.8em;">Log Keluar</button>
+            <button onclick="padamAkaunVendorPermanen()" style="background: #991b1b; color: white; border: none; padding: 6px 10px; border-radius: 4px; cursor: pointer; font-weight: bold; font-size: 0.8em;">⚠️ Padam Akaun Tetap</button>
         </div>
     </header>
 
@@ -58,8 +59,6 @@
             <!-- 1. TETAPAN PROFIL & BAYARAN -->
             <section class="card-box" style="border: 1px solid #e5e7eb; padding: 16px; border-radius: 8px; background: #fff; margin-bottom: 20px;">
                 <h3 style="margin-top: 0; color: #1e3a8a;">⚙️ 1. Maklumat Profil Gerai & Akaun Bank</h3>
-                <p style="font-size: 0.8em; color: #6b7280; margin-bottom: 15px;">Maklumat ini akan dipaparkan kepada pelajar semasa mereka ingin membuat bayaran QR/DuitNow.</p>
-
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 12px;">
                     <div class="form-group">
                         <label style="font-size: 0.8em; font-weight: bold;">Nama Kedai / Gerai:</label>
@@ -87,7 +86,7 @@
 
                     <div class="form-group">
                         <label style="font-size: 0.8em; font-weight: bold;">Nama Bank:</label>
-                        <input type="text" id="vendor-bank-name" placeholder="cth: Maybank / CIMB" style="width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
+                        <input type="text" id="vendor-bank-name" placeholder="cth: Maybank" style="width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
                     </div>
 
                     <div class="form-group">
@@ -101,7 +100,7 @@
                     </div>
 
                     <div class="form-group">
-                        <label style="font-size: 0.8em; font-weight: bold;">Pautan Gambar QR Code (URL Optional):</label>
+                        <label style="font-size: 0.8em; font-weight: bold;">Pautan Gambar QR Code (URL):</label>
                         <input type="text" id="vendor-qr-url" placeholder="https://..." style="width: 100%; padding: 6px; border: 1px solid #ccc; border-radius: 4px;">
                     </div>
                 </div>
@@ -114,70 +113,58 @@
             <!-- 2. PENGURUSAN MENU -->
             <section class="card-box" style="border: 1px solid #e5e7eb; padding: 16px; border-radius: 8px; background: #fff; margin-bottom: 20px;">
                 <h3 style="margin-top: 0; color: #1e3a8a;">🍲 2. Pengurusan Menu Makanan</h3>
-
-                <!-- Borang Tambah Menu -->
                 <div style="background: #f9fafb; padding: 12px; border-radius: 6px; margin-bottom: 15px; border: 1px solid #f3f4f6;">
                     <p style="font-size: 0.85em; font-weight: bold; margin: 0 0 8px 0; color: #374151;">+ Tambah Item Menu Baharu:</p>
                     <div style="display: flex; gap: 8px; flex-wrap: wrap;">
-                        <input type="text" id="menu-item-name" placeholder="Nama Makanan / Minuman" style="flex: 2; min-width: 150px; padding: 6px; border: 1px solid #ccc; border-radius: 4px; font-size: 0.85em;">
+                        <input type="text" id="menu-item-name" placeholder="Nama Makanan" style="flex: 2; min-width: 150px; padding: 6px; border: 1px solid #ccc; border-radius: 4px; font-size: 0.85em;">
                         <input type="number" step="0.50" id="menu-item-price" placeholder="Harga (RM)" style="flex: 1; min-width: 100px; padding: 6px; border: 1px solid #ccc; border-radius: 4px; font-size: 0.85em;">
-                        <button onclick="tambahMenuItem()" style="background: #2563eb; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 0.85em;">
-                            + Tambah
-                        </button>
+                        <button onclick="tambahMenuItem()" style="background: #2563eb; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-weight: bold; cursor: pointer; font-size: 0.85em;">+ Tambah</button>
                     </div>
                 </div>
-
-                <!-- Senarai Menu -->
-                <p style="font-size: 0.85em; font-weight: bold; margin-bottom: 6px;">Senarai Menu Ditawarkan:</p>
                 <div id="vendor-menu-list">
                     <p style="color: #888; font-size: 0.85em;">Memuatkan senarai menu...</p>
                 </div>
             </section>
 
-            <!-- 3. SENARAI PESANAN & MULTI-SYNC -->
+            <!-- 3. SENARAI PESANAN -->
             <section class="card-box" style="border: 1px solid #e5e7eb; padding: 16px; border-radius: 8px; background: #fff; margin-bottom: 20px;">
                 <h3 style="margin-top: 0; color: #1e3a8a;">📦 3. Pesanan Pelajar & Pengurusan Pukal</h3>
-
-                <!-- CONTAINER PENGURUSAN PUKAL (BATCH CONTROL KOLEJ) -->
-                <div id="vendor-batch-controls" style="margin-bottom: 15px;">
-                    <!-- Dijana secara dinamik oleh vendor.js berdasarkan pesanan aktif -->
-                </div>
-
-                <!-- SENARAI PESANAN AKTIF -->
-                <p style="font-size: 0.85em; font-weight: bold; margin-bottom: 10px;">Senarai Pesanan Masuk (Real-Time):</p>
+                <div id="vendor-batch-controls" style="margin-bottom: 15px;"></div>
                 <div id="vendor-active-orders">
                     <p style="color: #888; font-size: 0.85em;">Memuatkan pesanan masuk...</p>
                 </div>
             </section>
 
-            <!-- 4. JUMLAH JUALAN KESELURUHAN (TOTAL SALES) -->
+            <!-- 4. JUMLAH JUALAN KESELURUHAN -->
             <section class="card-box" style="background: linear-gradient(135deg, #059669, #047857); color: white; border-radius: 8px; margin-bottom: 20px; padding: 16px;">
                 <h3 style="color: white; margin-top: 0; margin-bottom: 5px;">📊 Jumlah Jualan Keseluruhan (Total Sales)</h3>
                 <h1 id="vendor-total-sales-display" style="margin: 0; font-size: 2.2em;">RM 0.00</h1>
                 <p style="font-size: 0.8em; opacity: 0.9; margin-top: 4px;">Berdasarkan pesanan yang telah selesai (Completed)</p>
             </section>
 
-            <!-- 5. SEJARAH PESANAN & LAPORAN GAYA EXCEL -->
+            <!-- 5. SEJARAH PESANAN & MUAT TURUN EXCEL -->
             <section class="card-box" style="border: 1px solid #e5e7eb; padding: 16px; border-radius: 8px; background: #fff;">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
-                    <h3 style="margin: 0; color: #1e3a8a;">📜 Sejarah Pesanan Lepas (Excel Report View)</h3>
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; flex-wrap: wrap; gap: 10px;">
+                    <h3 style="margin: 0; color: #1e3a8a;">📜 Sejarah Pesanan Lepas</h3>
+                    <button onclick="downloadExcelSejarahVendor()" style="background: #059669; color: white; border: none; padding: 6px 12px; border-radius: 4px; font-size: 0.8em; cursor: pointer; font-weight: bold;">📥 Muat Turun Fail Excel (.csv)</button>
                 </div>
 
                 <div style="overflow-x: auto;">
                     <table style="width: 100%; border-collapse: collapse; font-size: 0.85em; text-align: left;">
                         <thead>
                             <tr style="background-color: #f3f4f6; border-bottom: 2px solid #d1d5db;">
-                                <th style="padding: 8px; border: 1px solid #e5e7eb;">ID Pesanan</th>
+                                <th style="padding: 8px; border: 1px solid #e5e7eb;">ID</th>
                                 <th style="padding: 8px; border: 1px solid #e5e7eb;">Tarikh</th>
-                                <th style="padding: 8px; border: 1px solid #e5e7eb;">Nama Pelajar</th>
-                                <th style="padding: 8px; border: 1px solid #e5e7eb;">Menu / Item</th>
-                                <th style="padding: 8px; border: 1px solid #e5e7eb; text-align: right;">Jumlah (RM)</th>
+                                <th style="padding: 8px; border: 1px solid #e5e7eb;">Pelajar</th>
+                                <th style="padding: 8px; border: 1px solid #e5e7eb;">Item</th>
+                                <th style="padding: 8px; border: 1px solid #e5e7eb; text-align: right;">Jumlah</th>
                                 <th style="padding: 8px; border: 1px solid #e5e7eb; text-align: center;">Status</th>
+                                <th style="padding: 8px; border: 1px solid #e5e7eb; text-align: center;">Tindakan</th>
                             </tr>
                         </thead>
                         <tbody id="vendor-excel-history-body">
                             <tr>
-                                <td colspan="6" style="padding: 12px; text-align: center; color: #888;">Memuatkan data sejarah jualan...</td>
+                                <td colspan="7" style="padding: 12px; text-align: center; color: #888;">Memuatkan data sejarah jualan...</td>
                             </tr>
                         </tbody>
                     </table>
@@ -188,7 +175,6 @@
 
     </main>
 
-    <!-- Fail JS Vendor -->
     <script src="vendor.js"></script>
 </body>
 </html>

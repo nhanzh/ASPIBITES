@@ -16,14 +16,14 @@
     <header class="navbar">
         <div class="logo" style="text-align: center; padding: 15px 0;">
             <h1>ASPI<span>Bites</span></h1>
-            <p style="color: #2563eb; font-size: 0.85em; font-weight: bold;">🔑 Dashboard Kawalan Pentadbir & Lejer Komisyen</p>
+            <p style="color: #2563eb; font-size: 0.85em; font-weight: bold;">🔑 Dashboard Kawalan Pentadbir Sistem</p>
         </div>
     </header>
 
     <main class="container">
 
-        <!-- RINGKASAN LEJER RAHASIA -->
-        <section class="card-box" style="background-color: #eff6ff; border: 1px solid #bfdbfe;">
+        <!-- RINGKASAN LEJER RAHASIA (DISOROKKAN SEMASA PRESENTATION) -->
+        <section class="card-box" style="display: none; background-color: #eff6ff; border: 1px solid #bfdbfe;" id="admin-commission-section">
             <h3>💰 Lejer Komisyen Admin (RM 1.00 / Order)</h3>
             <div style="display: flex; justify-content: space-between; margin-top: 10px;">
                 <div>
@@ -39,7 +39,10 @@
 
         <!-- KAWALAN SEMUA PESANAN (REAL-TIME) -->
         <section class="card-box">
-            <h3>📊 Senarai Pesanan Keseluruhan System</h3>
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px;">
+                <h3 style="margin: 0;">📊 Senarai Pesanan Keseluruhan System</h3>
+                <button onclick="padamSemuaPesananSystem()" style="background: #dc2626; color: white; border: none; padding: 6px 12px; border-radius: 5px; font-size: 0.75em; font-weight: bold; cursor: pointer;">🗑️ Padam Semua Pesanan</button>
+            </div>
             <div id="admin-orders-list">
                 <p style="color: #888;">Memuatkan data pesanan...</p>
             </div>

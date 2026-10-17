@@ -52,10 +52,13 @@ function mulaPantauAdminDashboard() {
             }
 
             ordersContainer.innerHTML += `
-                <div style="border:1px solid #e5e7eb; padding:10px; border-radius:6px; margin-bottom:8px; font-size:0.85em;">
-                    <div style="display:flex; justify-content:space-between; font-weight:bold;">
+                <div style="border:1px solid #e5e7eb; padding:10px; border-radius:6px; margin-bottom:8px; font-size:0.85em; background: #fff;">
+                    <div style="display:flex; justify-content:space-between; font-weight:bold; align-items: center;">
                         <span>#${orderKey.slice(-5)} - ${order.studentName || 'Pelajar'} (${(order.deliveryLocation || '').toUpperCase()})</span>
-                        <span style="color:#2563eb;">${order.status}</span>
+                        <div style="display: flex; gap: 8px; align-items: center;">
+                            <span style="color:#2563eb; background: #eff6ff; padding: 2px 6px; border-radius: 4px;">${order.status}</span>
+                            <button onclick="padamPesananAdmin('${orderKey}')" style="background:#dc2626; color:white; border:none; padding:3px 6px; border-radius:4px; font-size:0.75em; cursor:pointer;" title="Padam Pesanan Ini">🗑️</button>
+                        </div>
                     </div>
                     <p style="margin:4px 0 0 0; color:#4b5563;">Jumlah Bayaran: RM ${(order.totalAmount || 0).toFixed(2)} | Delivery: RM ${(order.deliveryFeeTotal || 0).toFixed(2)}</p>
                     <p style="margin:2px 0 0 0; color:#059669; font-size:0.8em;">🔒 Net Runner: RM ${(order.runnerFeeNet || 0).toFixed(2)} | <strong>Komisyen Admin: RM ${(order.adminCommission || 1.00).toFixed(2)}</strong></p>
@@ -78,15 +81,47 @@ function mulaPantauAdminDashboard() {
         }
 
         snapshot.forEach((childSnap) => {
+            const vendorKey = childSnap.key;
             const vendor = childSnap.val();
+
             vendorsContainer.innerHTML += `
-                <div style="padding:8px 0; border-bottom:1px solid #eee; font-size:0.85em;">
-                    <strong>${vendor.shopName}</strong> (${(vendor.cafeLocation || '').toUpperCase()})<br/>
-                    <span style="color:#666; font-size:0.8em;">Bank: ${vendor.bankName || '-'} (${vendor.accountNo || '-'})</span>
+                <div style="padding:8px 0; border-bottom:1px solid #eee; font-size:0.85em; display: flex; justify-content: space-between; align-items: center;">
+                    <div>
+                        <strong>${vendor.shopName}</strong> (${(vendor.cafeLocation || '').toUpperCase()})<br/>
+                        <span style="color:#666; font-size:0.8em;">Bank: ${vendor.bankName || '-'} (${vendor.accountNo || '-'})</span>
+                    </div>
+                    <button onclick="padamVendorAdmin('${vendorKey}')" style="background:#dc2626; color:white; border:none; padding:4px 8px; border-radius:4px; font-size:0.75em; cursor:pointer; font-weight: bold;">🗑️ Padam</button>
                 </div>
             `;
         });
     });
+}
+
+// ==========================================
+// 3. FUNGSI PEMADAMAN ADMIN (REAL-TIME)
+// ==========================================
+function padamPesananAdmin(orderKey) {
+    if (confirm("Adakah anda pasti mahu memadam pesanan ini daripada sistem?")) {
+        db.ref(`orders/${orderKey}`).remove()
+            .then(() => alert("Pesanan berjaya dipadam."))
+            .catch(err => alert("Ralat: " + err.message));
+    }
+}
+
+function padamSemuaPesananSystem() {
+    if (confirm("AMARAN: Anda pasti mahu memadam SEMUA rekod pesanan dalam sistem?")) {
+        db.ref('orders').remove()
+            .then(() => alert("Semua rekod pesanan telah dikosongkan."))
+            .catch(err => alert("Ralat: " + err.message));
+    }
+}
+
+function padamVendorAdmin(vendorKey) {
+    if (confirm("Adakah anda pasti mahu memadam vendor ini dari senarai?")) {
+        db.ref(`vendors/${vendorKey}`).remove()
+            .then(() => alert("Vendor berjaya dipadam."))
+            .catch(err => alert("Ralat: " + err.message));
+    }
 }
 
 window.onload = mulaPantauAdminDashboard;
